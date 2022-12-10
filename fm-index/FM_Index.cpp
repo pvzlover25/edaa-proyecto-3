@@ -38,7 +38,7 @@ vector<int> FM_Index::posiciones(string &patron){
 string FM_Index::doc_locate(string &patron){
 	string ret="";
 	vector<int> locations=posiciones(patron);
-	vector<rango> rangos;
+	vector<int> numDocs;
 	int indice=0;
 	for(int i=0;i<locations.size();i++){
 		int l=locations[i];
@@ -46,13 +46,12 @@ string FM_Index::doc_locate(string &patron){
 			indice++;
 		}
 		if(indice==docs.size()) break;
-		rangos.push_back(docs[indice]);
+		//rangos.push_back(docs[indice]);
+		numDocs.push_back(indice+1);
 	}
-	for(int i=0;i<rangos.size();i++){
-		if(!ret.empty()) ret+="$";
-		rango r=rangos[i];
-		string sub=txt.substr(r.first,r.second-r.first+1);
-		ret+=sub;
+	for(int i=0;i<numDocs.size();i++){
+		if(!ret.empty()) ret+='$';
+		ret+="D"+numDocs[i];
 	}
 	return ret;
 }
