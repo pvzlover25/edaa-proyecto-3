@@ -1,7 +1,7 @@
-#include<iostream>
-#include "FM_Index.h"
+#include "FM_Index.cpp"
 
 //Compilacion: g++ -std=c++11 -O3 -DNDEBUG -I ~/include -L ~/lib main.cpp -o main -lsdsl -ldivsufsort -ldivsufsort64
+//Ejecucion: ./main nombreArchivo1 nombreArchivo2 nombreArchivo3 ...
 
 const char nl='\n';
 
@@ -11,9 +11,17 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	string texto="";
+	bool inicio=true;
 	for(int i=1;i<argc;i++){
-		if(!texto.empty()) texto+="$";
-		texto+=argv[i];
+		if(texto.empty()) texto+="$";
+		ifstream archivo(argv[i],ifstream::in);
+		string linea="",lineaAux="";
+		while(getLine(archivo,linea)){
+			if(!inicio) texto+=nl;
+			texto+=linea;
+			inicio=false; 
+		}
+		inicio=true;
 	}
 	FM_Index fmi(texto);
 	cout<<"Ingresa un patron: ";
